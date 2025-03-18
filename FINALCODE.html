@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cybersecurity Quiz</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .quiz-container {
+            width: 60%;
+            margin: auto;
+            padding: 20px;
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+        .question {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+        .question p {
+            margin-bottom: 10px;
+        }
+        .options {
+            text-align: left;
+            margin-left: 20px;
+        }
+        .btn {
+            background-color: #6200ea;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background-color: #3700b3;
+        }
+        .btn-challenge {
+            background-color: #ff4444;
+        }
+        .btn-challenge:hover {
+            background-color: #cc0000;
+        }
+        .topic-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .high-scores {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+        .additional-resources {
+            margin-top: 40px; /* Added space here */
+        }
+    </style>
+</head>
+<body>
+    <h1>Cybersecurity Quiz</h1>
+    <div class="quiz-container" id="quiz-container">
+        <h2>Select a Quiz Topic</h2>
+        <div class="topic-buttons">
+            <button class="btn" onclick="startQuiz('Social Engineering')">Social Engineering</button>
+            <button class="btn" onclick="startQuiz('Phishing')">Phishing</button>
+            <button class="btn" onclick="startQuiz('Password Security')">Password Security</button>
+            <button class="btn" onclick="startQuiz('Malware Protection')">Malware Protection</button>
+            <button class="btn" onclick="startQuiz('Network Security')">Network Security</button>
+            <button class="btn" onclick="startQuiz('Data Privacy')">Data Privacy</button>
+        </div>
+        <button class="btn btn-challenge" onclick="startChallenge()">Test Your Knowledge</button>
+        <div class="high-scores" id="high-scores">
+            <h3>High Scores</h3>
+            <p id="social-engineering-score">Social Engineering: 0/15</p>
+            <p id="phishing-score">Phishing: 0/15</p>
+            <p id="password-security-score">Password Security: 0/15</p>
+            <p id="malware-protection-score">Malware Protection: 0/15</p>
+            <p id="network-security-score">Network Security: 0/15</p>
+            <p id="data-privacy-score">Data Privacy: 0/15</p>
+        </div>
+        <div class="additional-resources" id="additional-resources">
+            <h3>Additional Learning Resources</h3>
+            <div class="news-feed">
+                <h4>Cybersecurity News Feed</h4>
+                <iframe src="https://www.cybersecuritynews.com" width="100%" height="300px"></iframe>
+            </div>
+            <div class="recommended-reading">
+                <h4>Recommended Reading</h4>
+                <ul>
+                    <li><a href="https://www.cybersecuritycourse.com/article1" target="_blank">Understanding Phishing Attacks</a></li>
+                    <li><a href="https://www.cybersecuritycourse.com/article2" target="_blank">Best Practices for Password Security</a></li>
+                    <li><a href="https://www.cybersecuritycourse.com/article3" target="_blank">How to Protect Against Malware</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const quizzes = {
+            "Social Engineering": [
+                { question: "1. Which technique involves creating a fabricated scenario to manipulate someone into divulging information?", options: ["Phishing", "Pretexting", "Baiting", "Tailgating"], answer: "Pretexting" },
+                { question: "2. What is 'quid pro quo' in social engineering?", options: ["Offering a service in exchange for information", "Sending malicious links via email", "Installing ransomware on a target’s device", "Stealing physical documents"], answer: "Offering a service in exchange for information" },
+                { question: "3. Which action mitigates tailgating risks?", options: ["Using biometric access controls", "Sharing passwords with colleagues", "Ignoring unfamiliar faces in secure areas", "Allowing strangers to borrow your access card"], answer: "Using biometric access controls" },
+                { question: "4. A caller claims to be from IT and asks for your login details to 'fix an urgent issue.' This is an example of:", options: ["Vishing", "Smishing", "Impersonation", "All of the above"], answer: "All of the above" },
+                { question: "5. Which psychological principle is often exploited in social engineering?", options: ["Authority", "Fear of missing out (FOMO)", "Reciprocity", "All of the above"], answer: "All of the above" },
+                { question: "6. What makes pretexting different from phishing?", options: ["Pretexting uses email; phishing uses phone calls", "Pretexting builds a fabricated narrative", "Phishing targets individuals; pretexting targets groups", "No difference—they’re the same"], answer: "Pretexting builds a fabricated narrative" },
+                { question: "7. Which is a red flag for a social engineering attempt?", options: ["Urgent requests for sensitive data", "Requests via official company channels", "Verified sender identity", "Offers with no strings attached"], answer: "Urgent requests for sensitive data" },
+                { question: "8. How does 'watering hole' attacks work?", options: ["Infecting websites frequented by targets", "Poisoning physical water supplies", "Spamming email lists", "Distributing USB drives in parking lots"], answer: "Infecting websites frequented by targets" },
+                { question: "9. What is the primary goal of social engineering?", options: ["To gain unauthorized access to systems", "To spread malware", "To manipulate individuals into revealing sensitive information", "To disrupt network services"], answer: "To manipulate individuals into revealing sensitive information" },
+                { question: "10. Which of the following is an example of baiting?", options: ["Leaving a malware-infected USB drive in a public place", "Sending a phishing email", "Impersonating a CEO over the phone", "Creating a fake login page"], answer: "Leaving a malware-infected USB drive in a public place" },
+                { question: "11. What is 'shoulder surfing' in social engineering?", options: ["Looking over someone's shoulder to steal information", "Using social media to gather information", "Creating fake websites", "Sending malicious emails"], answer: "Looking over someone's shoulder to steal information" },
+                { question: "12. Which of the following is a common target of social engineering attacks?", options: ["IT administrators", "End-users", "Firewalls", "Antivirus software"], answer: "End-users" },
+                { question: "13. What is the best defense against social engineering?", options: ["Employee training and awareness", "Installing antivirus software", "Using strong passwords", "Enabling firewalls"], answer: "Employee training and awareness" },
+                { question: "14. Which of the following is NOT a social engineering technique?", options: ["Phishing", "Pretexting", "SQL injection", "Baiting"], answer: "SQL injection" },
+                { question: "15. What is 'dumpster diving' in the context of social engineering?", options: ["Searching through trash for sensitive information", "Creating fake websites", "Sending malicious emails", "Impersonating someone over the phone"], answer: "Searching through trash for sensitive information" }
+            ],
+            "Phishing": [
+                { question: "1. Spear phishing differs from regular phishing because it:", options: ["Uses SMS instead of email", "Targets specific individuals/organizations", "Always includes malware attachments", "Exploits voice calls"], answer: "Targets specific individuals/organizations" },
+                { question: "2. What is 'pharming'?", options: ["Redirecting users to fake websites via DNS manipulation", "Sending fake invoices via email", "Harvesting credentials through fake Wi-Fi hotspots", "Impersonating CEOs in emails"], answer: "Redirecting users to fake websites via DNS manipulation" },
+                { question: "3. Which email detail most strongly indicates phishing?", options: ["Generic greeting (e.g., 'Dear Customer')", "Company logo in the footer", "A mismatched sender domain (e.g., @gmail.com for a bank)", "Links to a secure HTTPS website"], answer: "A mismatched sender domain (e.g., @gmail.com for a bank)" },
+                { question: "4. What should you do if you receive a suspicious email?", options: ["Reply to verify legitimacy", "Forward it to IT/security teams", "Click links to check where they lead", "Delete it immediately"], answer: "Forward it to IT/security teams" },
+                { question: "5. Which is a characteristic of 'whaling'?", options: ["Targets low-level employees", "Focuses on CEOs/senior executives", "Uses voice calls exclusively", "Spreads via USB drives"], answer: "Focuses on CEOs/senior executives" },
+                { question: "6. A text message asks you to click a link to 'reset your PayPal account.' This is:", options: ["Vishing", "Smishing", "Pharming", "Pretexting"], answer: "Smishing" },
+                { question: "7. What makes a phishing email appear legitimate?", options: ["Spoofed sender addresses", "Typos and grammatical errors", "Lack of contact information", "All of the above"], answer: "Spoofed sender addresses" },
+                { question: "8. Which tool helps organizations detect phishing campaigns?", options: ["Firewalls", "Email filtering software", "Antivirus scanners", "All of the above"], answer: "All of the above" },
+                { question: "9. What is 'clone phishing'?", options: ["Creating a replica of a legitimate email with malicious links", "Sending phishing emails to a large audience", "Using voice calls to trick victims", "Redirecting users to fake websites"], answer: "Creating a replica of a legitimate email with malicious links" },
+                { question: "10. Which of the following is a common indicator of a phishing website?", options: ["HTTPS in the URL", "Misspelled domain names", "A padlock icon in the browser", "Professional design"], answer: "Misspelled domain names" },
+                { question: "11. What is the primary goal of phishing attacks?", options: ["To disrupt network services", "To steal sensitive information", "To spread malware", "To encrypt data"], answer: "To steal sensitive information" },
+                { question: "12. Which of the following is NOT a phishing technique?", options: ["Spear phishing", "Whaling", "Vishing", "SQL injection"], answer: "SQL injection" },
+                { question: "13. What is 'angler phishing'?", options: ["Using social media to trick victims", "Sending phishing emails", "Redirecting users to fake websites", "Using voice calls to trick victims"], answer: "Using social media to trick victims" },
+                { question: "14. What is the best way to verify the legitimacy of an email?", options: ["Check the sender's email address", "Click on links in the email", "Reply to the email", "Ignore the email"], answer: "Check the sender's email address" },
+                { question: "15. Which of the following is a common target of phishing attacks?", options: ["Banking credentials", "Social media accounts", "Corporate email accounts", "All of the above"], answer: "All of the above" }
+            ],
+            "Password Security": [
+                { question: "1. Which practice weakens password security?", options: ["Using a passphrase", "Reusing passwords across accounts", "Enabling multi-factor authentication", "Storing passwords in a manager"], answer: "Reusing passwords across accounts" },
+                { question: "2. What is a 'password salting' technique used for?", options: ["Adding random data to passwords before hashing", "Encrypting password databases", "Enforcing frequent password changes", "Blocking brute-force attacks"], answer: "Adding random data to passwords before hashing" },
+                { question: "3. Why are password managers more secure than memorization?", options: ["They generate and store complex, unique passwords", "They prevent phishing attacks", "They encrypt all internet traffic", "They block keyloggers"], answer: "They generate and store complex, unique passwords" },
+                { question: "4. Which factor is NOT part of multi-factor authentication?", options: ["Something you know", "Something you are", "Something you have", "Something you want"], answer: "Something you want" },
+                { question: "5. What is the primary risk of password reuse?", options: ["Increased memorability", "Credential stuffing attacks", "Longer login times", "All of the above"], answer: "Credential stuffing attacks" },
+                { question: "6. A company enforces 90-day password resets. Why might this be counterproductive?", options: ["Users create weaker passwords over time", "It encourages MFA adoption", "It reduces brute-force attack risks", "All of the above"], answer: "Users create weaker passwords over time" },
+                { question: "7. Which is a recommended NIST guideline for passwords?", options: ["Require special characters", "Enforce frequent password changes", "Prioritize length over complexity", "All of the above"], answer: "Prioritize length over complexity" },
+                { question: "8. What is 'credential stuffing'?", options: ["Testing stolen passwords on multiple accounts", "Encrypting password databases", "Generating random passwords", "Phishing for login details"], answer: "Testing stolen passwords on multiple accounts" },
+                { question: "9. What is the minimum recommended length for a strong password?", options: ["8 characters", "12 characters", "16 characters", "20 characters"], answer: "12 characters" },
+                { question: "10. Which of the following is a strong password?", options: ["Password123", "P@ssw0rd!", "CorrectHorseBatteryStaple", "12345678"], answer: "CorrectHorseBatteryStaple" },
+                { question: "11. What is 'password entropy'?", options: ["A measure of password strength", "A method for encrypting passwords", "A technique for storing passwords", "A type of password attack"], answer: "A measure of password strength" },
+                { question: "12. Which of the following is NOT a password attack method?", options: ["Brute-force attack", "Dictionary attack", "Rainbow table attack", "SQL injection"], answer: "SQL injection" },
+                { question: "13. What is 'password hashing'?", options: ["Converting a password into a fixed-length string", "Encrypting a password", "Storing a password in plaintext", "Generating a random password"], answer: "Converting a password into a fixed-length string" },
+                { question: "14. Which of the following is a common mistake in password creation?", options: ["Using personal information", "Using long passphrases", "Using special characters", "Using a password manager"], answer: "Using personal information" },
+                { question: "15. What is the purpose of a 'password policy'?", options: ["To enforce strong password creation", "To store passwords securely", "To encrypt passwords", "To generate random passwords"], answer: "To enforce strong password creation" }
+            ],
+            "Malware Protection": [
+                { question: "1. What distinguishes ransomware from spyware?", options: ["Ransomware encrypts data for extortion", "Spyware displays unwanted ads", "Ransomware spreads via email only", "Spyware deletes files"], answer: "Ransomware encrypts data for extortion" },
+                { question: "2. Which action helps prevent malware infections?", options: ["Disabling automatic software updates", "Opening email attachments from unknown senders", "Using a reputable antivirus program", "All of the above"], answer: "Using a reputable antivirus program" },
+                { question: "3. A Trojan horse is malware that:", options: ["Replicates itself across networks", "Disguises itself as legitimate software", "Logs keystrokes to steal data", "All of the above"], answer: "Disguises itself as legitimate software" },
+                { question: "4. What is the purpose of a 'sandbox' in malware analysis?", options: ["Isolate and observe suspicious files", "Encrypt sensitive data", "Block phishing emails", "Generate strong passwords"], answer: "Isolate and observe suspicious files" },
+                { question: "5. Which is a sign of a rootkit infection?", options: ["Unusual network activity", "Antivirus software disabling itself", "Missing system files", "All of the above"], answer: "All of the above" },
+                { question: "6. Why are drive-by downloads dangerous?", options: ["They require user interaction", "They infect devices when visiting compromised websites", "They only target mobile devices", "They’re easy to detect"], answer: "They infect devices when visiting compromised websites" },
+                { question: "7. What does heuristic analysis in antivirus software do?", options: ["Detects known malware signatures", "Identifies suspicious behavior patterns", "Blocks all executable files", "Encrypts sensitive data"], answer: "Identifies suspicious behavior patterns" },
+                { question: "8. How can backups mitigate ransomware damage?", options: ["By paying the ransom faster", "Restoring data without negotiating", "Deleting infected files automatically", "All of the above"], answer: "Restoring data without negotiating" },
+                { question: "9. What is 'adware'?", options: ["Software that displays unwanted ads", "Malware that encrypts data", "Malware that steals credentials", "Malware that spreads via email"], answer: "Software that displays unwanted ads" },
+                { question: "10. Which of the following is a type of malware?", options: ["Virus", "Worm", "Trojan", "All of the above"], answer: "All of the above" },
+                { question: "11. What is 'fileless malware'?", options: ["Malware that resides in memory rather than on disk", "Malware that spreads via USB drives", "Malware that encrypts files", "Malware that steals passwords"], answer: "Malware that resides in memory rather than on disk" },
+                { question: "12. Which of the following is NOT a malware distribution method?", options: ["Email attachments", "USB drives", "Software updates", "Firewalls"], answer: "Firewalls" },
+                { question: "13. What is 'polymorphic malware'?", options: ["Malware that changes its code to avoid detection", "Malware that spreads via email", "Malware that encrypts files", "Malware that steals credentials"], answer: "Malware that changes its code to avoid detection" },
+                { question: "14. What is the primary goal of ransomware?", options: ["To steal sensitive information", "To encrypt data and demand payment", "To display unwanted ads", "To log keystrokes"], answer: "To encrypt data and demand payment" },
+                { question: "15. Which of the following is a common sign of malware infection?", options: ["Slow system performance", "Unexpected pop-ups", "Unusual network activity", "All of the above"], answer: "All of the above" }
+            ],
+            "Network Security": [
+                { question: "1. What is the purpose of a firewall?", options: ["Monitor and control incoming/outgoing traffic", "Encrypt data in transit", "Block phishing emails", "Generate VPNs"], answer: "Monitor and control incoming/outgoing traffic" },
+                { question: "2. Which protocol is insecure and should be avoided?", options: ["HTTPS", "FTP", "SSH", "IPsec"], answer: "FTP" },
+                { question: "3. What does a VPN primarily protect against on public Wi-Fi?", options: ["Eavesdropping", "Phishing", "Physical theft", "Malware infections"], answer: "Eavesdropping" },
+                { question: "4. An attacker intercepts communication between two parties. This is a:", options: ["DDoS attack", "Man-in-the-middle attack", "SQL injection", "Zero-day exploit"], answer: "Man-in-the-middle attack" },
+                { question: "5. Which practice secures a home Wi-Fi network?", options: ["Using WPA3 encryption", "Disabling the router’s firewall", "Keeping default SSID and password", "Allowing guest networks without passwords"], answer: "Using WPA3 encryption" },
+                { question: "6. What is the purpose of intrusion detection systems (IDS)?", options: ["Block malicious traffic automatically", "Monitor networks for suspicious activity", "Encrypt sensitive data", "All of the above"], answer: "Monitor networks for suspicious activity" },
+                { question: "7. Which vulnerability does WEP encryption have?", options: ["Weak key generation", "Susceptible to brute-force attacks", "No authentication mechanism", "All of the above"], answer: "All of the above" },
+                { question: "8. Why is network segmentation important?", options: ["Limits lateral movement during breaches", "Increases internet speed", "Reduces firewall costs", "All of the above"], answer: "Limits lateral movement during breaches" },
+                { question: "9. What is a 'zero-day exploit'?", options: ["An attack that exploits a previously unknown vulnerability", "An attack that spreads via email", "An attack that targets firewalls", "An attack that steals passwords"], answer: "An attack that exploits a previously unknown vulnerability" },
+                { question: "10. Which of the following is a network security best practice?", options: ["Regularly updating software", "Using default passwords", "Disabling firewalls", "Allowing unrestricted access to all users"], answer: "Regularly updating software" },
+                { question: "11. What is 'port scanning'?", options: ["A technique to identify open ports on a network", "A method to encrypt network traffic", "A type of DDoS attack", "A way to block malicious traffic"], answer: "A technique to identify open ports on a network" },
+                { question: "12. Which of the following is NOT a network security tool?", options: ["Firewall", "IDS", "Antivirus", "SQL injection"], answer: "SQL injection" },
+                { question: "13. What is 'network hardening'?", options: ["Strengthening network security by reducing vulnerabilities", "Encrypting all network traffic", "Blocking all incoming traffic", "Disabling all network services"], answer: "Strengthening network security by reducing vulnerabilities" },
+                { question: "14. What is the purpose of a DMZ (Demilitarized Zone) in network security?", options: ["To isolate public-facing servers from the internal network", "To encrypt network traffic", "To block all incoming traffic", "To monitor network activity"], answer: "To isolate public-facing servers from the internal network" },
+                { question: "15. Which of the following is a common network attack?", options: ["DDoS", "Phishing", "Ransomware", "All of the above"], answer: "All of the above" }
+            ],
+            "Data Privacy": [
+                { question: "1. What does GDPR regulate?", options: ["Protection of personal data in the EU", "Cybersecurity standards for US banks", "Encryption protocols", "Social media content moderation"], answer: "Protection of personal data in the EU" },
+                { question: "2. Which is an example of PII (Personally Identifiable Information)?", options: ["Social Security Number", "Company revenue data", "Public blog posts", "Weather forecasts"], answer: "Social Security Number" },
+                { question: "3. What is 'data minimization'?", options: ["Collecting only necessary data", "Deleting all backups", "Encrypting sensitive files", "Sharing data with third parties"], answer: "Collecting only necessary data" },
+                { question: "4. Which technique anonymizes data?", options: ["Tokenization", "Encryption", "Data masking", "All of the above"], answer: "All of the above" },
+                { question: "5. A company accidentally exposes customer emails online. This is a:", options: ["Data breach", "Phishing attack", "DDoS attack", "Insider threat"], answer: "Data breach" },
+                { question: "6. What is the purpose of a Data Protection Officer (DPO)?", options: ["Ensure compliance with privacy laws", "Develop malware detection tools", "Manage network firewalls", "All of the above"], answer: "Ensure compliance with privacy laws" },
+                { question: "7. Which law requires notifying users of data collection in California?", options: ["CCPA", "HIPAA", "PCI DSS", "FISMA"], answer: "CCPA" },
+                { question: "8. An employee shares customer data without consent. Which principle is violated?", options: ["Integrity", "Confidentiality", "Availability", "Non-repudiation"], answer: "Confidentiality" },
+                { question: "9. What is 'data sovereignty'?", options: ["The concept that data is subject to the laws of the country where it is stored", "The practice of encrypting all data", "The process of anonymizing data", "The act of sharing data with third parties"], answer: "The concept that data is subject to the laws of the country where it is stored" },
+                { question: "10. Which of the following is a data privacy best practice?", options: ["Encrypting sensitive data", "Sharing data with third parties", "Storing data in plaintext", "Ignoring data breaches"], answer: "Encrypting sensitive data" },
+                { question: "11. What is 'data retention'?", options: ["The practice of storing data for a specific period", "The process of deleting all data", "The act of sharing data with third parties", "The encryption of sensitive data"], answer: "The practice of storing data for a specific period" },
+                { question: "12. Which of the following is NOT a data privacy regulation?", options: ["GDPR", "CCPA", "HIPAA", "FTP"], answer: "FTP" },
+                { question: "13. What is 'data masking'?", options: ["A technique to hide sensitive data", "A method to encrypt data", "A process to delete data", "A way to share data with third parties"], answer: "A technique to hide sensitive data" },
+                { question: "14. What is the purpose of a privacy impact assessment (PIA)?", options: ["To evaluate the impact of data processing on privacy", "To encrypt sensitive data", "To delete unnecessary data", "To share data with third parties"], answer: "To evaluate the impact of data processing on privacy" },
+                { question: "15. Which of the following is a common data privacy risk?", options: ["Unauthorized access to data", "Data encryption", "Data anonymization", "Data sharing with consent"], answer: "Unauthorized access to data" }
+            ]
+        };
+
+        // High scores for each quiz
+        const highScores = {
+            "Social Engineering": 0,
+            "Phishing": 0,
+            "Password Security": 0,
+            "Malware Protection": 0,
+            "Network Security": 0,
+            "Data Privacy": 0
+        };
+
+        function startQuiz(topic) {
+            const container = document.getElementById('quiz-container');
+            let quizHtml = `<h2>${topic} Quiz</h2>`;
+            quizzes[topic].forEach((q, index) => {
+                quizHtml += `<div class='question'><p>${q.question}</p><div class='options'>`;
+                q.options.forEach(option => {
+                    quizHtml += `<input type='radio' name='q${index}' value='${option}'> ${option}<br>`;
+                });
+                quizHtml += `</div></div>`;
+            });
+            quizHtml += `<button class='btn' onclick='submitQuiz("${topic}")'>Submit</button>`;
+            container.innerHTML = quizHtml;
+        }
+
+        function startChallenge() {
+            const container = document.getElementById('quiz-container');
+            let allQuestions = [];
+            for (const topic in quizzes) {
+                allQuestions = allQuestions.concat(quizzes[topic]);
+            }
+            // Randomize the questions
+            allQuestions.sort(() => Math.random() - 0.5);
+
+            // Renumber the questions sequentially from 1 to 90
+            allQuestions = allQuestions.map((q, index) => {
+                return {
+                    ...q,
+                    question: `${index + 1}. ${q.question.split('.').slice(1).join('.').trim()}`
+                };
+            });
+
+            let quizHtml = `<h2>Test Your Knowledge: 90-Question Challenge</h2>`;
+            allQuestions.forEach((q, index) => {
+                quizHtml += `<div class='question'><p>${q.question}</p><div class='options'>`;
+                q.options.forEach(option => {
+                    quizHtml += `<input type='radio' name='q${index}' value='${option}'> ${option}<br>`;
+                });
+                quizHtml += `</div></div>`;
+            });
+            quizHtml += `<button class='btn' onclick='submitChallenge()'>Submit</button>`;
+            container.innerHTML = quizHtml;
+        }
+
+        function submitQuiz(topic) {
+            let score = 0;
+            quizzes[topic].forEach((q, index) => {
+                const selected = document.querySelector(`input[name='q${index}']:checked`);
+                if (selected && selected.value === q.answer) {
+                    score++;
+                }
+            });
+
+            // Update high score if the current score is higher
+            if (score > highScores[topic]) {
+                highScores[topic] = score;
+                updateHighScores();
+            }
+
+            // Display custom message based on score
+            let message = "";
+            if (score <= 5) {
+                message = "Maybe go back and review a little more.";
+            } else if (score <= 10) {
+                message = "Almost there! Refresh your memory before the next attempt.";
+            } else {
+                message = "Congratulations! You aced the quiz!";
+            }
+
+            document.getElementById('quiz-container').innerHTML = `
+                <h2>Your Score: ${score}/15</h2>
+                <p>${message}</p>
+                <button class='btn' onclick='location.reload()'>Try Again</button>
+            `;
+        }
+
+        function submitChallenge() {
+            let allQuestions = [];
+            for (const topic in quizzes) {
+                allQuestions = allQuestions.concat(quizzes[topic]);
+            }
+            let score = 0;
+            allQuestions.forEach((q, index) => {
+                const selected = document.querySelector(`input[name='q${index}']:checked`);
+                if (selected && selected.value === q.answer) {
+                    score++;
+                }
+            });
+            document.getElementById('quiz-container').innerHTML = `<h2>Your Score: ${score}/90</h2><button class='btn' onclick='location.reload()'>Try Again</button>`;
+        }
+
+        function updateHighScores() {
+            document.getElementById('social-engineering-score').textContent = `Social Engineering: ${highScores["Social Engineering"]}/15`;
+            document.getElementById('phishing-score').textContent = `Phishing: ${highScores["Phishing"]}/15`;
+            document.getElementById('password-security-score').textContent = `Password Security: ${highScores["Password Security"]}/15`;
+            document.getElementById('malware-protection-score').textContent = `Malware Protection: ${highScores["Malware Protection"]}/15`;
+            document.getElementById('network-security-score').textContent = `Network Security: ${highScores["Network Security"]}/15`;
+            document.getElementById('data-privacy-score').textContent = `Data Privacy: ${highScores["Data Privacy"]}/15`;
+        }
+    </script>
+</body>
+</html>
